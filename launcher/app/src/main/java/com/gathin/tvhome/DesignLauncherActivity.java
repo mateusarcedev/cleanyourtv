@@ -1,6 +1,7 @@
 package com.gathin.tvhome;
 
 import android.app.Activity;
+import androidx.webkit.WebViewAssetLoader;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -45,7 +46,7 @@ import java.util.Set;
  * No HTTP URLs or untrusted pages may access the privileged JS bridge.
  */
 public final class DesignLauncherActivity extends Activity {
-    private static final String ASSET = "file:///android_asset/design_launcher/index.html";
+    private static final String ASSET = "https://appassets.androidplatform.net/assets/design_launcher/index.html";
     private static final String PREFS = "mateusarce_tv_design";
     private WebView web;
     private boolean launchedExternal;
@@ -73,20 +74,23 @@ public final class DesignLauncherActivity extends Activity {
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
-        s.setAllowFileAccess(true);
+        s.setAllowFileAccess(false);
         s.setAllowContentAccess(false);
         s.setAllowFileAccessFromFileURLs(false);
         s.setAllowUniversalAccessFromFileURLs(false);
         s.setBlockNetworkLoads(true);
         s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+        final WebViewAssetLoader assetLoader = new WebViewAssetLoader.Builder()
+                .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
+                .build();
         web.setWebViewClient(new WebViewClient() {
             @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 return true;
             }
             @Override public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 String url = request.getUrl().toString();
-                if (url.startsWith("file:///android_asset/design_launcher/")
-                        || url.startsWith("data:") || url.startsWith("blob:")) return null;
+                if (url.startsWith("https://appassets.androidplatform.net/assets/"))
+                    return assetLoader.shouldInterceptRequest(request.getUrl());
                 return new WebResourceResponse("text/plain", "UTF-8",
                         new ByteArrayInputStream(new byte[0]));
             }
