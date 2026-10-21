@@ -1,7 +1,7 @@
 # Launcher mateusarce.dev para Android TV / Google TV
 
 Esta implementação incorpora o **mesmo HTML, CSS, fontes, ícones e animações**
-exportados do protótipo `TV Launcher.html`, em um WebView **offline**,
+exportados do protótipo `TV Launcher.html`, em um WebView **offline** via `WebViewAssetLoader` (origem local HTTPS),
 e usa uma ponte Java restrita para funções do Android.
 
 Design system: `mateusarce.dev` (tema escuro, menta `#15F5BA`,
@@ -71,7 +71,7 @@ Ativar `Estatísticas sob o relógio` ainda exibe números de exemplo do design.
 - Android TV / Google TV, API 26+ (conforme app original).
 - A fidelidade depende da versão do Android System WebView. Firmware muito
   antigo pode não suportar recursos modernos do HTML exportado.
-- O WebView bloqueia navegação externa e downloads HTTP; a ponte Java é
+- O WebView bloqueia navegação externa e downloads HTTP; carrega arquivos somente da origem `appassets.androidplatform.net`; a ponte Java é
   exposta somente à página local empacotada.
 - As permissões/ADB do CleanYourTV original continuam inalteradas.
 - Testar numa TV real antes de definir como home principal.
