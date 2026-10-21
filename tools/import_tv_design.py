@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 import re
 
-RECORDS = re.compile(r'<script type="__bundler/(manifest|template|ext_resources)">\\s*(.*?)\\s*</script>', re.S)
+RECORDS = re.compile(r'<script type="__bundler/(manifest|template|ext_resources)">\s*(.*?)\s*</script>', re.S)
 EXT = {'application/javascript':'js', 'text/javascript':'js', 'image/svg+xml':'svg',
        'font/woff':'woff', 'font/woff2':'woff2', 'text/css':'css'}
 
@@ -112,7 +112,7 @@ def main():
                  if r['uuid'] in names}
     template = template.replace('<head>', '<head>\n<script>window.__resources=' +
                                 json.dumps(resources) + ';</script>', 1)
-    pattern = re.compile(r'(<script\\s+type="text/x-dc"[^>]*>)(.*?)(</script>)', re.S)
+    pattern = re.compile(r'(<script\s+type="text/x-dc"[^>]*>)(.*?)(</script>)', re.S)
     template, count = pattern.subn(lambda m: m.group(1)+inject(m.group(2))+m.group(3),
                                    template, count=1)
     if count != 1:
