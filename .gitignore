@@ -17,3 +17,6 @@ work/
 *.aab
 launcher/hs_err_pid*.log
 launcher/replay_pid*.log
+
+# Personal Claude Design export: generated locally and bundled only into the owner's APK.
+launcher/app/src/main/assets/design_launcher/
